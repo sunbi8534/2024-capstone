@@ -27,7 +27,7 @@ public class S3Controller {
 
     @Operation(summary = "파일 업로드 API", description = "닉네임정보를 받아 파일을 업로드합니다.")
     @PostMapping(value = "/user/upload")
-    public ResponseEntity uploadFile(
+    public MultipartFile uploadFile(
             @Parameter(description = "사용자 닉네임", required = true, example = "minho")
             @RequestPart(value = "name") String nickname,
             @Parameter(description = "오디오 파일", required = true, example = "song.mp3")
@@ -41,10 +41,10 @@ public class S3Controller {
                 fileName = s3Uploader.upload(file, "file"); // S3 버킷의 file 디렉토리 안에 저장됨
                 System.out.println("fileName = " + fileName);
             }catch (IOException e){
-                return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+                e.printStackTrace();
             }
         }
 
-        return new ResponseEntity(HttpStatus.OK);
+        return file;
     }
 }
